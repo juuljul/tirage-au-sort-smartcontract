@@ -17,8 +17,12 @@ const networkConfig = {
 }
 
 const developmentChains = ["hardhat", "localhost"]
+const frontEndContractsFile = "../frontend/constants/contractAddresses.json"
+const frontEndAbiFile = "../frontend/constants/abi.json"
 
 module.exports = {
     networkConfig,
     developmentChains,
+    frontEndContractsFile,
+    frontEndAbiFile,
 }
