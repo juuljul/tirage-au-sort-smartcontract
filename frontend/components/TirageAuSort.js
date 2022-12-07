@@ -1,6 +1,7 @@
 import { contractAddresses, abi } from "../constants"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { useEffect, useState } from "react"
+import { useNotification } from "web3uikit"
 import { ethers } from "ethers"
 
 export default function TirageAuSort() {
@@ -11,6 +12,8 @@ export default function TirageAuSort() {
     const [entranceFee, setEntranceFee] = useState("0")
     const [numberOfPlayers, setNumberOfPlayers] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
+
+    const dispatch = useNotification()
 
     const {
         runContractFunction: enterTirageSort,
@@ -61,11 +64,21 @@ export default function TirageAuSort() {
         }
     }, [isWeb3Enabled])
 
-    
+
+    const handleNewNotification = () => {
+        dispatch({
+            type: "info",
+            message: "Transaction effectuée",
+            title: "Notification de transaction",
+            position: "topR",
+        })
+    }
+
     const handleSuccess = async (tx) => {
         try {
             await tx.wait(1)
             updateUIValues()
+            handleNewNotification(tx)
         } catch (error) {
             console.log(error)
         }
@@ -73,7 +86,7 @@ export default function TirageAuSort() {
 
 
     return (
-        <div className="p-5">
+        <div>
             <h1>Tirage au sort</h1>
             {tirageSortAddress ? (
                 <>
