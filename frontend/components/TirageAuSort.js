@@ -86,28 +86,31 @@ export default function TirageAuSort() {
 
 
     return (
-        <div>
-            <h1>Tirage au sort</h1>
+        <div className="p-5">
+            <h1 className="py-4 px-4 text-center text-2xl text-blue-500">Participation au tirage au sort ouverte</h1>
             {tirageSortAddress ? (
                 <>
-                    <button
-                        onClick={async () =>
-                            await enterTirageSort({
-                                onSuccess: handleSuccess,
-                                onError: (error) => console.log(error),
-                            })
-                        }
-                        disabled={isLoading || isFetching}
-                    >
-                        {isLoading || isFetching ? (
-                            <div>Chargement</div>
-                        ) : (
-                            "Participer"
-                        )}
-                    </button>
-                    <div>Frais d'inscription: {ethers.utils.formatUnits(entranceFee, "ether")} ETH</div>
-                    <div>Nombre actuel de participants: {numberOfPlayers}</div>
-                    <div>Adresse du gagnant le plus récent: {recentWinner}</div>
+                    <div className="flex justify-center ">              
+                        <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white text-3xl py-2 px-4 rounded mb-10"
+                            onClick={async () =>
+                                await enterTirageSort({
+                                    onSuccess: handleSuccess,
+                                    onError: (error) => console.log(error),
+                                })
+                            }
+                            disabled={isLoading || isFetching}
+                        >
+                            {isLoading || isFetching ? (
+                                <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full"></div>
+                            ) : (
+                                "Participer"
+                            )}
+                        </button>
+                    </div>  
+                    <div className="text-center font-bold">Frais d'inscription: {ethers.utils.formatUnits(entranceFee, "ether")} ETH</div>
+                    <div className="text-center font-bold mb-10">Nombre actuel de participants: {numberOfPlayers}</div>
+                    <div className="text-center">Adresse du gagnant le plus récent: {recentWinner}</div>
                 </>
             ) : (
                 <div>Se connecter </div>
