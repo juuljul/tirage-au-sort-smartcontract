@@ -9,6 +9,21 @@ export default function TirageAuSort() {
     const tirageSortAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
 
     const [entranceFee, setEntranceFee] = useState("0")
+    const [numberOfPlayers, setNumberOfPlayers] = useState("0")
+    const [recentWinner, setRecentWinner] = useState("0")
+
+    const {
+        runContractFunction: enterTirageSort,
+        data: enterTxResponse,
+        isLoading,
+        isFetching,
+    } = useWeb3Contract({
+        abi: abi,
+        contractAddress: tirageSortAddress,
+        functionName: "enterTirageSort",
+        msgValue: entranceFee,
+        params: {},
+    })
 
     const { runContractFunction: getEntranceFee } = useWeb3Contract({
         abi: abi,
@@ -17,9 +32,27 @@ export default function TirageAuSort() {
         params: {},
     })
 
+    const { runContractFunction: getNumberOfPlayers } = useWeb3Contract({
+        abi: abi,
+        contractAddress: tirageSortAddress,
+        functionName: "getNumberOfPlayers",
+        params: {},
+    })
+
+    const { runContractFunction: getRecentWinner } = useWeb3Contract({
+        abi: abi,
+        contractAddress: tirageSortAddress,
+        functionName: "getRecentWinner",
+        params: {},
+    })
+
     async function updateUIValues() {
         const entranceFeeFromCall = (await getEntranceFee()).toString()
+        const numPlayersFromCall = (await getNumberOfPlayers()).toString()
+        const recentWinnerFromCall = await getRecentWinner()
         setEntranceFee(entranceFeeFromCall)
+        setNumberOfPlayers(numPlayersFromCall)
+        setRecentWinner(recentWinnerFromCall)
     }
 
     useEffect(() => {
@@ -28,13 +61,40 @@ export default function TirageAuSort() {
         }
     }, [isWeb3Enabled])
 
+    
+    const handleSuccess = async (tx) => {
+        try {
+            await tx.wait(1)
+            updateUIValues()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     return (
-        <div>
+        <div className="p-5">
             <h1>Tirage au sort</h1>
             {tirageSortAddress ? (
                 <>
+                    <button
+                        onClick={async () =>
+                            await enterTirageSort({
+                                onSuccess: handleSuccess,
+                                onError: (error) => console.log(error),
+                            })
+                        }
+                        disabled={isLoading || isFetching}
+                    >
+                        {isLoading || isFetching ? (
+                            <div>Chargement</div>
+                        ) : (
+                            "Participer"
+                        )}
+                    </button>
                     <div>Frais d'inscription: {ethers.utils.formatUnits(entranceFee, "ether")} ETH</div>
+                    <div>Nombre actuel de participants: {numberOfPlayers}</div>
+                    <div>Adresse du gagnant le plus récent: {recentWinner}</div>
                 </>
             ) : (
                 <div>Se connecter </div>
