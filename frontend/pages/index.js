@@ -1,6 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
+import TirageAuSort from "../components/TirageAuSort";
 import { useMoralis } from "react-moralis";
 
 const supportedChains = ["31337"];
@@ -20,7 +21,7 @@ export default function Home() {
         <div>
           {supportedChains.includes(parseInt(chainId).toString()) ? (
             <div>
-              {`Tirage au sort`}
+              <TirageAuSort/>
             </div>
           ) : (
             <div>{`SVP se connecter avec un bon chainId`}</div>
