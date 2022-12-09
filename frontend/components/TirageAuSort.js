@@ -87,7 +87,7 @@ export default function TirageAuSort() {
 
     return (
         <div className="p-5">
-            <h1 className="py-4 px-4 text-center text-2xl text-blue-500">Participation au tirage au sort ouverte</h1>
+            <h1 className="py-4 px-4 text-center text-2xl text-blue-500 my-6">Participation au tirage au sort ouverte</h1>
             {tirageSortAddress ? (
                 <>
                     <div className="flex justify-center ">              
